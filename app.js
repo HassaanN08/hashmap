@@ -33,7 +33,7 @@ const insertIntoBuckets = (key, value, buckets, capacity) => {
     const index = hash(key, capacity);
     let head = buckets[index];
 
-    if (!buckets[index]) {
+    if (!head) {
         buckets[index] = Node(key, value);
     } else {
         while(head) {
@@ -62,9 +62,8 @@ const HashMap = () => {
     const set = (key, value) => {
         const exists = insertIntoBuckets(key, value, buckets, capacity);
 
-        if (exists) return;
-
         if (!exists) size++;
+        else return;
 
         if (size > capacity * loadFactor) {
             
@@ -126,7 +125,7 @@ const HashMap = () => {
     }
 
     const remove = (key) => {
-        const index = hash(key);
+        const index = hash(key, capacity);
         let bucket = buckets[index];
 
         let head = bucket;
