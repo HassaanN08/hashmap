@@ -29,7 +29,7 @@ const hash = (key, capacity) => {
     return hashCode;
 }
 
-const insertIntoBuckets = (key, value, buckets, size, capacity) => {
+const insertIntoBuckets = (key, value, buckets, capacity) => {
     const index = hash(key, capacity);
     let head = buckets[index];
 
@@ -49,7 +49,6 @@ const insertIntoBuckets = (key, value, buckets, size, capacity) => {
         head.nextNode = Node(key, value);
     }
 
-    size++;
     return false;
 }
 
@@ -61,9 +60,11 @@ const HashMap = () => {
     let buckets = createBuckets(capacity);
 
     const set = (key, value) => {
-        const exists = insertIntoBuckets(key, value, buckets, size, capacity);
+        const exists = insertIntoBuckets(key, value, buckets, capacity);
 
         if (exists) return;
+
+        if (!exists) size++;
 
         if (size > capacity * loadFactor) {
             
@@ -78,9 +79,9 @@ const HashMap = () => {
                 let bucket = oldBuckets[i];
 
                 while(bucket) {
-                    const alreadyExists = insertIntoBuckets(bucket.key, bucket.value, buckets, size, capacity);
+                    insertIntoBuckets(bucket.key, bucket.value, buckets, capacity);
 
-                    if (alreadyExists) continue;
+                    size++;
 
                     bucket = bucket.nextNode;
                 }
@@ -89,7 +90,7 @@ const HashMap = () => {
     }
 
     const get = (key) => {
-        const index = hash(key);
+        const index = hash(key, capacity);
         let bucket = buckets[index];
 
         let head = bucket;
@@ -97,7 +98,7 @@ const HashMap = () => {
         if (!bucket) return null;
 
         while (head != null) {
-            if (head.key == key) {
+            if (head.key === key) {
                 return head.value;
             }
 
@@ -108,7 +109,7 @@ const HashMap = () => {
     }
 
     const has = (key) => {
-        const index = hash(key);
+        const index = hash(key, capacity);
         let bucket = buckets[index];
 
         let head = bucket;
@@ -116,7 +117,7 @@ const HashMap = () => {
         if(!bucket) return false;
 
         while(head != null) {
-            if (head.key == key) return true;
+            if (head.key === key) return true;
 
             head = head.nextNode;
         }
@@ -132,14 +133,14 @@ const HashMap = () => {
 
         if (!bucket) return false;
 
-        if (bucket.key == key) {
+        if (bucket.key === key) {
             buckets[index] = buckets[index].nextNode;
             size--;
             return true;
         }
 
         while(head != null) {
-            if (head.nextNode && head.nextNode.key == key) {
+            if (head.nextNode && head.nextNode.key === key) {
                 head.nextNode = head.nextNode.nextNode;
                 size--;
                 return true;
