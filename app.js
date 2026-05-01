@@ -1,4 +1,4 @@
-const Node = (key, value, nextNode = null) => {   //Hey woman
+const Node = (key, value, nextNode = null) => {
     return {
         key,
         value,
