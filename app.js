@@ -70,7 +70,9 @@ const HashMap = () => {
             capacity = 2 * capacity;
 
             let oldBuckets = buckets;
-            clear();
+            
+            buckets = createBuckets(capacity);
+            size = 0;
             
             for (let i = 0; i < oldBuckets.length; i++) {
                 if (!oldBuckets[i]) continue;
