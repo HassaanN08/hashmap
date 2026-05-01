@@ -90,9 +90,8 @@ const HashMap = () => {
 
     const get = (key) => {
         const index = hash(key, capacity);
-        let bucket = buckets[index];
 
-        let head = bucket;
+        let head = buckets[index];
 
         if (!bucket) return null;
 
